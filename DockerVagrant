@@ -1,0 +1,165 @@
+#DockerVagrant Mangaer node setup
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+
+Vagrant.configure("2") do |config|
+  
+	#config.vm.box = "bento/centos-7"
+	config.vm.synced_folder '/Users/diliprampalepu/Downloads', '/vagrant'
+	# Disable SELinux
+	#config.vm.provision :shell, inline: "setenforce 0", run: "always"
+    
+
+config.vm.define "manager1" do |manager1|
+
+    manager1.vm.box = "bento/centos-7"
+	manager1.vm.network "private_network", ip: "222.0.0.10"
+    manager1.vm.hostname = "manager1"
+	manager1.vm.provider "virtualbox" do |vb|
+	vb.name = "Manager1"
+	vb.memory = "1024" ## in MB's
+	vb.cpus = 1
+	vb.gui = false
+	
+end
+    manager1.vm.provision "shell", inline: <<-SHELL
+		echo "Running pre boot commands"
+		# Configure /etc/hosts file
+		echo "" | sudo tee --append /etc/hosts 2> /dev/null && \
+		echo "# Host config for  Nodes" | sudo tee --append /etc/hosts 2> /dev/null && \
+		echo "222.0.0.10   manager1.anilankem.com  manager1" | sudo tee --append /etc/hosts 2> /dev/null && \
+		echo "222.0.0.20   manager2.anilankem.com  manager2" | sudo tee --append /etc/hosts 2> /dev/null && \
+		echo "222.0.0.30   worker1.anilankem.com  worker1" | sudo tee --append /etc/hosts 2> /dev/null && \
+		echo "222.0.0.40   worker2.anilankem.com  worker2" | sudo tee --append /etc/hosts 2> /dev/null && \
+		echo "222.0.0.50   worker3.anilankem.com  worker3" | sudo tee --append /etc/hosts 2> /dev/null && \
+		echo ""
+		echo "Run pre boot commands"
+		curl -fsSL https://get.docker.com -o get-docker.sh
+		sudo sh get-docker.sh
+		sudo yum install -y -q bash-c*
+		sudo curl -L https://raw.githubusercontent.com/docker/compose/1.24.1/contrib/completion/bash/docker-compose -o /etc/bash_completion.d/docker-compose
+		sudo systemctl start docker
+		sudo systemctl enable docker
+		
+	SHELL
+
+end
+
+ 
+config.vm.define "manager2" do |manager2|
+
+    manager2.vm.box = "bento/centos-7"
+	manager2.vm.network "private_network", ip: "222.0.0.20"
+    manager2.vm.hostname = "manager2"
+	manager2.vm.provider "virtualbox" do |vb|
+	vb.name = "manager2"
+	vb.memory = "1024" ## in MB's
+	vb.cpus = 1
+	vb.gui = false
+	
+end
+    manager2.vm.provision "shell", inline: <<-SHELL
+		echo "Running pre boot commands"
+		# Configure /etc/hosts file
+		echo "" | sudo tee --append /etc/hosts 2> /dev/null && \
+		echo "# Host config for  Nodes" | sudo tee --append /etc/hosts 2> /dev/null && \
+		echo "222.0.0.10   manager1.anilankem.com  manager1" | sudo tee --append /etc/hosts 2> /dev/null && \
+		echo "222.0.0.20   manager2.anilankem.com  manager2" | sudo tee --append /etc/hosts 2> /dev/null && \
+		echo "222.0.0.30   worker1.anilankem.com  worker1" | sudo tee --append /etc/hosts 2> /dev/null && \
+		echo "222.0.0.40   worker2.anilankem.com  worker2" | sudo tee --append /etc/hosts 2> /dev/null && \
+		echo "222.0.0.50   worker3.anilankem.com  worker3" | sudo tee --append /etc/hosts 2> /dev/null && \
+		echo ""
+		echo "Run pre boot commands"
+		curl -fsSL https://get.docker.com -o get-docker.sh
+		sudo sh get-docker.sh
+		sudo yum install -y -q bash-c*
+		sudo curl -L https://raw.githubusercontent.com/docker/compose/1.24.1/contrib/completion/bash/docker-compose -o /etc/bash_completion.d/docker-compose
+		sudo systemctl start docker
+		sudo systemctl enable docker
+
+		
+		
+    SHELL
+
+end
+
+config.vm.define "worker1" do |worker1|
+
+    worker1.vm.box = "bento/centos-7"
+	worker1.vm.network "private_network", ip: "222.0.0.30"
+    worker1.vm.hostname = "worker1"
+	worker1.vm.provider "virtualbox" do |vb|
+	vb.name = "worker1"
+	vb.memory = "1024" ## in MB's
+	vb.cpus = 1
+	vb.gui = false
+	
+end
+    worker1.vm.provision "shell", inline: <<-SHELL
+		echo "Running pre boot commands"
+		# Configure /etc/hosts file
+		echo "" | sudo tee --append /etc/hosts 2> /dev/null && \
+		echo "# Host config for  Nodes" | sudo tee --append /etc/hosts 2> /dev/null && \
+		echo "222.0.0.10   manager1.anilankem.com  manager1" | sudo tee --append /etc/hosts 2> /dev/null && \
+		echo "222.0.0.20   manager2.anilankem.com  manager2" | sudo tee --append /etc/hosts 2> /dev/null && \
+		echo "222.0.0.30   worker1.anilankem.com  worker1" | sudo tee --append /etc/hosts 2> /dev/null && \
+		echo "222.0.0.40   worker2.anilankem.com  worker2" | sudo tee --append /etc/hosts 2> /dev/null && \
+		echo "222.0.0.50   worker3.anilankem.com  worker3" | sudo tee --append /etc/hosts 2> /dev/null && \
+		echo ""
+		echo "Run pre boot commands"
+		curl -fsSL https://get.docker.com -o get-docker.sh
+		sudo sh get-docker.sh
+		sudo yum install -y -q bash-c*
+		sudo curl -L https://raw.githubusercontent.com/docker/compose/1.24.1/contrib/completion/bash/docker-compose -o /etc/bash_completion.d/docker-compose
+		sudo systemctl start docker
+		sudo systemctl enable docker
+
+		
+		
+    SHELL
+
+end
+
+config.vm.define "worker2" do |worker2|
+
+    worker2.vm.box = "bento/centos-7"
+	worker2.vm.network "private_network", ip: "222.0.0.40"
+    worker2.vm.hostname = "worker2"
+	worker2.vm.provider "virtualbox" do |vb|
+	vb.name = "worker2"
+	vb.memory = "1024" ## in MB's
+	vb.cpus = 1
+	vb.gui = false
+	
+end
+    worker2.vm.provision "shell", inline: <<-SHELL
+		echo "Running pre boot commands"
+		# Configure /etc/hosts file
+		echo "" | sudo tee --append /etc/hosts 2> /dev/null && \
+		echo "# Host config for  Nodes" | sudo tee --append /etc/hosts 2> /dev/null && \
+		echo "222.0.0.10   manager1.anilankem.com  manager1" | sudo tee --append /etc/hosts 2> /dev/null && \
+		echo "222.0.0.20   manager2.anilankem.com  manager2" | sudo tee --append /etc/hosts 2> /dev/null && \
+		echo "222.0.0.30   worker1.anilankem.com  worker1" | sudo tee --append /etc/hosts 2> /dev/null && \
+		echo "222.0.0.40   worker2.anilankem.com  worker2" | sudo tee --append /etc/hosts 2> /dev/null && \
+		echo "222.0.0.50   worker3.anilankem.com  worker3" | sudo tee --append /etc/hosts 2> /dev/null && \
+		echo ""
+		echo "Run pre boot commands"
+		curl -fsSL https://get.docker.com -o get-docker.sh
+		sudo sh get-docker.sh
+		sudo yum install -y -q bash-c*
+		sudo curl -L https://raw.githubusercontent.com/docker/compose/1.24.1/contrib/completion/bash/docker-compose -o /etc/bash_completion.d/docker-compose
+		sudo systemctl start docker
+		sudo systemctl enable docker
+
+		
+		
+    SHELL
+
+end
+
+
+
+
+end
+
